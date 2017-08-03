@@ -5,15 +5,18 @@ namespace ChatBot
 {
     class Program
     {
-        public static void Main()
+
+        //Delete letters
+        static string Trim(string str, char[] chars)
         {
-            //Endless cycle
-            while (true)
+            string strA = str; //Coppy line (do not correct)
+
+            //Delete symbols
+            for (int i = 0; i < chars.Length; i++)
             {
-                Console.WriteLine("Your answer:");
-                string s = Console.ReadLine();
-                Console.WriteLine("Bot answered: " + Ans(quest) + "\n");
+                strA = strA.Replace(char.ToString(chars[i]), "");
             }
+            return strA;
         }
 
         static string Ans(string quest)
@@ -23,7 +26,7 @@ namespace ChatBot
 
             quest = quest.ToLower(); //Translate to lower register
             quest = Trim(quest, tr.ToCharArray()); //Delete letters
-            string[] baza = File.ReadAllLines("1.txt");
+            string[] baza = File.ReadAllLines("D:\\C#\\ChatBot\\ChatBot\\bin\\Debug\\1.txt");
 
             //Searching
             for (int i = 0; i < baza.Length; i += 2)
@@ -37,17 +40,15 @@ namespace ChatBot
             return ans; //Answer
         }
 
-        //Delete letters
-        static string Trim(string str, char[] chars)
+        public static void Main()
         {
-            string stra = str; //Coppy line (do not correct)
-
-            //Delete symbols
-            for (int i = 0; i < chars.Length; i++)
+            //Endless cycle
+            while (true)
             {
-                stra = stra.Replace(char.ToString(chars[i]), "");
+                Console.Write("Your answer:");
+                string quest = Console.ReadLine();
+                Console.WriteLine("Bot answered: " + Ans(quest) + "\n");
             }
-            return stra;
-        }
+        } 
     }
 }
