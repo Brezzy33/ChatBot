@@ -5,41 +5,45 @@ namespace ChatBot
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            Console.WriteLine("Your answer:");
-            string s = Console.ReadLine();
-            Console.WriteLine("Bot answer:" + Ans(q)+"/n");
+            //Endless cycle
+            while (true)
+            {
+                Console.WriteLine("Your answer:");
+                string s = Console.ReadLine();
+                Console.WriteLine("Bot answered: " + Ans(quest) + "\n");
+            }
         }
 
-        private static string Ans(string q)
+        static string Ans(string quest)
         {
             string tr = ")(:^^=!?", //Simbols that should delete
                 ans = ""; //Bots answers
 
-            q = q.ToLower(); //Translate to lower register
-            q = Trim(q, tr.ToCharArray()); //Delete letters
+            quest = quest.ToLower(); //Translate to lower register
+            quest = Trim(quest, tr.ToCharArray()); //Delete letters
             string[] baza = File.ReadAllLines("1.txt");
 
             //Searching
-            for (int i = 0; i < baza.Length; i += 2) 
+            for (int i = 0; i < baza.Length; i += 2)
             {
-                if (q==baza[i])
+                if (quest == baza[i])
                 {
-                    ans = baza[i + 1];
-                    break;
-                }   
+                    ans = baza[i + 1]; //Return answer
+                    break; //End cycle
+                }
             }
-            return ans;
+            return ans; //Answer
         }
 
         //Delete letters
-        private static string Trim(string str, char[] chars)
+        static string Trim(string str, char[] chars)
         {
             string stra = str; //Coppy line (do not correct)
 
             //Delete symbols
-            for (int i=0;i<chars.Length;i++)
+            for (int i = 0; i < chars.Length; i++)
             {
                 stra = stra.Replace(char.ToString(chars[i]), "");
             }
