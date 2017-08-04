@@ -6,7 +6,7 @@ namespace ChatBot
     {
         public static void Main()
         {
-            ChatBot bot = new ChatBot(@"D:\\C#\\ChatBot\\ChatBot\\bin\\Debug\\1.txt"); //Create bot
+            ChatBot bot = new ChatBot(@"D:\\C#\\ChatBot\\ChatBot\\bin\\Debug\\1.txt" , @"D:\\C#\\ChatBot\\ChatBot\\bin\\Debug\\SwearWords.txt"); //Create bot
             bot.GetStr += bot_GetStr; //Subscribe to action
 
             //Endless cycle

@@ -9,19 +9,27 @@ namespace ChatBot
     {
         string q, //Question
         path, //Way
+        pathSwearWord, //Way to swear words
         userAnswer; //Users answer(for education)
         List<string> sempls = new List<string>(); //Answers-Questions (Base)
         bool flag = true; //Switch education/work
 
         public event Action<string> GetStr; //Event when enter new text
 
-        public ChatBot(string pat)
+        /// <summary>
+        /// Add base constructor
+        /// </summary>
+        /// <param name="pat"></param>
+        /// <param name="badpat"></param>
+        public ChatBot(string pat, string badpat)
         {
             path = pat; //Way
+            pathSwearWord = badpat; //Way to bad words
 
             try
             {
                 sempls.AddRange(File.ReadAllLines(path)); //Try add base
+                sempls.AddRange(File.ReadLines(pathSwearWord)); //Try add bad words
             }
             catch
             {
@@ -49,8 +57,13 @@ namespace ChatBot
         {
             if (flag)
             {
+                string tr = ")(:^^=!?", //Symbols that we should delete
+                ans = string.Empty;
+
+                qw = qw.ToLower();
+                qw = Trim(qw, tr.ToCharArray()); //Delete letters
                 q = qw;
-                string ans = Answer(qw);
+                ans = Answer(qw);
 
                 if (ans == string.Empty)
                 {
@@ -63,8 +76,18 @@ namespace ChatBot
             else
             {
                 flag = true;
+                qw = qw.ToLower();
                 userAnswer = qw;
-                Teach();
+                if (!(AntiSwearWords(userAnswer) || AntiSwearWords(q)))
+                {
+                    Teach();
+                    GetStr("I Remembered! \n");
+                }
+                else
+                {
+                    GetStr("Such a bad boy!");
+                }
+
                 GetStr("\n Enter answer: ");
             }
         }
@@ -102,6 +125,24 @@ namespace ChatBot
             sempls.Add(q); //Add question
             sempls.Add(userAnswer); //Answer
             File.WriteAllLines(path, sempls.ToArray()); //Save
+        }
+
+        //Swear words finder
+        bool AntiSwearWords(string inputString)
+        {
+            string[] swArray = File.ReadAllLines(pathSwearWord); //File with swear words
+            string[] words = Trim(inputString, ")(:^^=!?".ToCharArray()).Split(); //Find words without symbols
+
+            //Find bad words
+            foreach (string str in swArray)
+            {
+                foreach (string str2 in words)
+                    if (str == str2) //Bad words was found
+                    {
+                        return true;
+                    }
+            }
+            return false; //Was not found
         }
 
         void ChatBot_GetStr(string obj) //Stug or Cap for event (if event = empty)
